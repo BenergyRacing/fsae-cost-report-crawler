@@ -43,7 +43,7 @@ function question(text: string): Promise<string> {
 
   const systems = await crawl(page, systemsUrl);
 
-  console.log(`Writing to file ${vehicleId}.json...`)
+  console.log(`Writing to file out/${vehicleId}.json...`)
   await fs.writeFile(`./out/${vehicleId}.json`, JSON.stringify(systems, null, 2));
 
   console.log(`Done!`);
