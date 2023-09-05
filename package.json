@@ -1,0 +1,17 @@
+{
+  "name": "fsae-cost-report-crawler",
+  "author": "Guilherme Chaguri",
+  "private": true,
+  "dependencies": {
+    "axios": "^1.5.0",
+    "puppeteer": "^21.1.1"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "start:test": "ts-node src/test.ts"
+  }
+}
