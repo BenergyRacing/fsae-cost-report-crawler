@@ -1,9 +1,11 @@
 import puppeteer, { Protocol } from 'puppeteer';
 import * as fs from 'fs/promises';
-import { environment } from './environment/environment';
-import { getQueryStringParam, hasFileName } from './utils/url';
-import { crawl } from './crawl';
 import * as readline from 'readline';
+import * as path from 'path';
+import { environment } from './environment/environment';
+import { crawl } from './crawl';
+import { getQueryStringParam } from './utils/url';
+import { downloadFiles } from './downloadFiles';
 
 const rl = readline.createInterface(process.stdin, process.stdout);
 
@@ -39,12 +41,20 @@ function question(text: string): Promise<string> {
 
   await page.setViewport({ width: 1080, height: 608 });
 
-  const vehicleId = getQueryStringParam(systemsUrl, 'VehicleID');
+  const vehicleId = getQueryStringParam(systemsUrl, 'VehicleID') || '';
 
-  const systems = await crawl(page, systemsUrl);
+  const cost = await crawl(page, vehicleId, systemsUrl);
 
-  console.log(`Writing to file out/${vehicleId}.json...`)
-  await fs.writeFile(`./out/${vehicleId}.json`, JSON.stringify(systems, null, 2));
+  const vehicleDir = path.join('./out', vehicleId || 'export');
+  await fs.mkdir(vehicleDir, { recursive: true });
+
+  const costJsonPath = path.join(vehicleDir, 'cost-report.json');
+
+  console.log(`Checking attachments to download...`);
+  await downloadFiles(page, cost, vehicleDir);
+
+  console.log(`Writing to file ${costJsonPath}...`);
+  await fs.writeFile(costJsonPath, JSON.stringify(cost, null, 2));
 
   console.log(`Done!`);
   await browser.close();

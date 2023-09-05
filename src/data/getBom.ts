@@ -1,6 +1,7 @@
 import { Page } from 'puppeteer';
 import { parseTable } from '../utils/table';
 import { environment } from '../environment/environment';
+import { CostAttachment } from './getAttachments';
 
 export interface CostBom {
   parts: CostBomPart[];
@@ -26,6 +27,7 @@ export interface CostBomPart {
   subtotal: string;
   partBomUrl: string;
   partBom?: CostPartBom;
+  attachments?: CostAttachment[];
 }
 
 export interface CostBomMaterial {
@@ -76,11 +78,7 @@ export interface CostBomTooling {
   subtotal: string;
 }
 
-export async function getBom(page: Page, url: string): Promise<CostBom> {
-  const absoluteUrl = new URL(url, environment.baseUrl).href;
-
-  await page.goto(absoluteUrl);
-
+export async function getBom(page: Page): Promise<CostBom> {
   return {
     parts: await getBomParts(page),
     materials: await getBomMaterials(page),
@@ -90,11 +88,7 @@ export async function getBom(page: Page, url: string): Promise<CostBom> {
   };
 }
 
-export async function getPartBom(page: Page, url: string): Promise<CostPartBom> {
-  const absoluteUrl = new URL(url, environment.baseUrl).href;
-
-  await page.goto(absoluteUrl);
-
+export async function getPartBom(page: Page): Promise<CostPartBom> {
   return {
     materials: await getBomMaterials(page),
     processes: await getBomProcesses(page),

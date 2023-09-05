@@ -1,7 +1,7 @@
 import { Page } from 'puppeteer';
-import { environment } from '../environment/environment';
-import { parseTable } from '../utils/table';
 import { CostBom } from './getBom';
+import { CostAttachment } from './getAttachments';
+import { parseTable } from '../utils/table';
 
 export interface CostAssembly {
   title: string;
@@ -11,13 +11,10 @@ export interface CostAssembly {
   viewUrl: string;
 
   bom?: CostBom;
+  attachments?: CostAttachment[];
 }
 
-export async function getAssemblies(page: Page, url: string): Promise<CostAssembly[]> {
-  const absoluteUrl = new URL(url, environment.baseUrl).href;
-
-  await page.goto(absoluteUrl);
-
+export async function getAssemblies(page: Page): Promise<CostAssembly[]> {
   const table = await page.waitForSelector('#content .table-responsive table');
   const results = await table!.evaluate(parseTable);
 
