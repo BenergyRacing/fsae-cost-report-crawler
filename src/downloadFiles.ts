@@ -1,8 +1,7 @@
-import { CostSystem } from './data/getSystems';
-import { downloadAttachment } from './data/downloadAttachment';
 import { Page } from 'puppeteer';
-import { CostAttachment } from './data/getAttachments';
-import { Cost } from './crawl';
+import { Cost } from './models/cost';
+import { CostAttachment } from './models/cost-attachment';
+import { downloadAttachment } from './data/downloadAttachment';
 
 export async function downloadFiles(page: Page, cost: Cost, outputDir: string): Promise<void> {
   console.log(`Checking vehicle attachments...`);

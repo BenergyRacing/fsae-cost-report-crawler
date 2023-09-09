@@ -1,15 +1,6 @@
 import { Page } from 'puppeteer';
-import { CostAssembly } from './getAssemblies';
-import { CostAttachment } from './getAttachments';
+import { CostSystem } from '../models/cost-system';
 import { parseTable } from '../utils/table';
-
-export interface CostSystem {
-  name: string;
-  price: string;
-  manageUrl: string;
-  assemblies?: CostAssembly[];
-  attachments?: CostAttachment[];
-}
 
 export async function getSystems(page: Page): Promise<CostSystem[]> {
   const table = await page.waitForSelector('#content .table-responsive table');

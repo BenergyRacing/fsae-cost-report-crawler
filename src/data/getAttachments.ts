@@ -1,14 +1,5 @@
 import { Page } from 'puppeteer';
-
-export interface CostAttachment {
-  title: string;
-  type: string;
-  downloadUrl: string;
-
-  path?: string;
-  filename?: string;
-  size?: number;
-}
+import { CostAttachment } from '../models/cost-attachment';
 
 export async function getAttachments(page: Page): Promise<CostAttachment[]> {
   const table = await page.waitForSelector('.attachments-list table');

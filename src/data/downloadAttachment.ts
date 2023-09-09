@@ -1,8 +1,8 @@
 import { Page } from 'puppeteer';
 import * as fs from 'fs';
 import * as path from 'path';
-import { CostAttachment } from './getAttachments';
 import { environment } from '../environment/environment';
+import { CostAttachment } from '../models/cost-attachment';
 import { get, getHeader, waitToEndStream } from '../utils/https';
 
 export async function downloadAttachment(page: Page, outputDir: string, attachment: CostAttachment): Promise<void> {

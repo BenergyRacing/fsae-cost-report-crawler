@@ -1,16 +1,11 @@
 import { Page } from 'puppeteer';
-import { CostSystem, getSystems } from './data/getSystems';
+import { Cost } from './models/cost';
+import { getSystems } from './data/getSystems';
 import { getAssemblies } from './data/getAssemblies';
 import { getBom, getPartBom } from './data/getBom';
 import { loadPage } from './data/loadPage';
-import { CostAttachment, getAttachments } from './data/getAttachments';
+import { getAttachments } from './data/getAttachments';
 
-export interface Cost {
-  vehicleId: string;
-  crawledAt: string;
-  systems: CostSystem[];
-  attachments?: CostAttachment[];
-}
 
 export async function crawl(page: Page, vehicleId: string, systemsUrl: string): Promise<Cost> {
   console.log(`Fetching Systems of ${systemsUrl}...`);
