@@ -2,6 +2,8 @@
 
 This is an automated tool that exports FSAE Online cost reports into JSON files.
 
+This library was developed at [B'Energy Racing](https://benergyracing.com.br), a Formula SAE Electric Team from the [Facens University Center](https://facens.br).
+
 ## Setting up
 
 - Install NodeJS 16+
