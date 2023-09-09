@@ -7,6 +7,7 @@ import { CostAttachment, getAttachments } from './data/getAttachments';
 
 export interface Cost {
   vehicleId: string;
+  crawledAt: string;
   systems: CostSystem[];
   attachments?: CostAttachment[];
 }
@@ -44,6 +45,7 @@ export async function crawl(page: Page, vehicleId: string, systemsUrl: string): 
 
   return {
     vehicleId: vehicleId,
+    crawledAt: new Date().toISOString(),
     systems: systems,
     attachments: systemsAttachments,
   };

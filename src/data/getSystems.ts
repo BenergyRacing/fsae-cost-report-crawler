@@ -1,8 +1,7 @@
 import { Page } from 'puppeteer';
-import { parseTable } from '../utils/table';
-import { environment } from '../environment/environment';
 import { CostAssembly } from './getAssemblies';
 import { CostAttachment } from './getAttachments';
+import { parseTable } from '../utils/table';
 
 export interface CostSystem {
   name: string;

@@ -1,7 +1,6 @@
 import { Page } from 'puppeteer';
-import { parseTable } from '../utils/table';
-import { environment } from '../environment/environment';
 import { CostAttachment } from './getAttachments';
+import { parseTable } from '../utils/table';
 
 export interface CostBom {
   parts: CostBomPart[];
