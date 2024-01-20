@@ -1,17 +1,11 @@
 import puppeteer, { Protocol } from 'puppeteer';
 import * as fs from 'fs/promises';
-import * as readline from 'readline';
 import * as path from 'path';
 import { environment } from './environment/environment';
 import { crawl } from './crawl';
 import { getQueryStringParam } from './utils/url';
 import { downloadFiles } from './downloadFiles';
-
-const rl = readline.createInterface(process.stdin, process.stdout);
-
-function question(text: string): Promise<string> {
-  return new Promise(resolve => rl.question(text, resolve));
-}
+import { question } from './utils/readline';
 
 (async () => {
   const cookieCdsWeb = await question('Cookie ".SaeCdsWeb": ');

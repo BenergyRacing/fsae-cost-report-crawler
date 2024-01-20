@@ -5,10 +5,12 @@
   "license": "GPL-3.0",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "start:test": "ts-node src/test.ts"
+    "start:test": "ts-node src/test.ts",
+    "tools:pdf-to-png": "ts-node src/tools/convertPdfFilesToImages.ts"
   },
   "dependencies": {
     "axios": "^1.5.0",
+    "node-poppler": "^7.1.0",
     "puppeteer": "^21.1.1"
   },
   "devDependencies": {
