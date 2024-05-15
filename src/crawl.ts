@@ -5,7 +5,9 @@ import { getAssemblies } from './data/getAssemblies';
 import { getBom, getPartBom } from './data/getBom';
 import { loadPage } from './data/loadPage';
 import { getAttachments } from './data/getAttachments';
-
+import { CatalogLinks, getCatalogLinks } from './data/getCatalogLinks';
+import { fetchCatalog } from './fetchCatalog';
+import { environment } from './environment/environment';
 
 export async function crawl(page: Page, vehicleId: string, systemsUrl: string): Promise<Cost> {
   console.log(`Fetching Systems of ${systemsUrl}...`);
@@ -13,6 +15,8 @@ export async function crawl(page: Page, vehicleId: string, systemsUrl: string): 
 
   const systems = await getSystems(page);
   const systemsAttachments = await getAttachments(page);
+
+  let catalogLinks: CatalogLinks | undefined;
 
   for (const system of systems) {
     console.log(`Fetching Assemblies of ${system.name}...`);
@@ -24,6 +28,9 @@ export async function crawl(page: Page, vehicleId: string, systemsUrl: string): 
     for (const assembly of system.assemblies!) {
       console.log(`Fetching Assembly BOM of ${system.name} / ${assembly.title}...`);
       await loadPage(page, assembly.viewUrl);
+
+      if (!catalogLinks)
+        catalogLinks = await getCatalogLinks(page);
 
       assembly.bom = await getBom(page);
       assembly.attachments = await getAttachments(page);
@@ -38,10 +45,14 @@ export async function crawl(page: Page, vehicleId: string, systemsUrl: string): 
     }
   }
 
+  const catalog = catalogLinks ? await fetchCatalog(page, catalogLinks) : undefined;
+
   return {
     vehicleId: vehicleId,
     crawledAt: new Date().toISOString(),
+    baseUrl: new URL(systemsUrl, environment.baseUrl).origin,
     systems: systems,
     attachments: systemsAttachments,
+    catalog: catalog,
   };
 }
