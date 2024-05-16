@@ -1,42 +1,40 @@
-import { Page } from 'puppeteer';
+import { ElementHandle, Page } from 'puppeteer';
 import { loadPage } from '../loadPage';
+import { getCatalogItemsLinks } from './getCatalogItemsLinks';
+import { getQueryStringParam } from '../../utils/url';
 
-export async function getCatalogItems<T>(page: Page, url: string | undefined): Promise<T[]> {
+export async function getCatalogItems<T>(
+  page: Page,
+  url: string | undefined,
+  queryStringId: string,
+  getItem: (form: ElementHandle<HTMLFormElement>, id: string) => Promise<T>,
+): Promise<T[]> {
   if (!url)
     return [];
 
   await loadPage(page, url);
 
-  const code = await page.evaluate(parseCatalogItemsCode);
+  const urls = await getCatalogItemsLinks(page);
+  const items: T[] = [];
 
-  return await page.evaluate<[], () => T[]>(code);
-}
+  let index = 0;
 
-function parseCatalogItemsCode(): string {
-  const scripts = document.querySelectorAll('script');
-  let itemsCode = '';
+  for (const url of urls) {
+    index++;
 
-  scripts.forEach(script => {
-    const code = script.innerText;
+    const id = getQueryStringParam(url, queryStringId) || '';
 
-    if (!code)
-      return;
+    console.log(`Parsing ${id} (${index} / ${urls.length})...`);
 
-    const regex = /items\.push\({(.*?)}\);/g;
+    await loadPage(page, url);
 
-    let m: RegExpExecArray | null;
-    while ((m = regex.exec(code)) !== null) {
-      // This is necessary to avoid infinite loops with zero-width matches
-      if (m.index === regex.lastIndex) {
-        regex.lastIndex++;
-      }
+    const form = await page.waitForSelector('form');
 
-      itemsCode += m[0] + '\n';
-    }
-  });
+    if (!form)
+      continue;
 
-  if (!itemsCode)
-    return itemsCode;
+    items.push(await getItem(form, id));
+  }
 
-  return '(function() { let items = [];\n' + itemsCode + '\nreturn items; })()';
+  return items;
 }

@@ -1,6 +1,5 @@
 import { CostSystem } from './cost-system';
 import { CostAttachment } from './cost-attachment';
-import { Catalog } from './catalog';
 
 export interface Cost {
   vehicleId: string;
@@ -8,5 +7,4 @@ export interface Cost {
   baseUrl: string;
   systems: CostSystem[];
   attachments?: CostAttachment[];
-  catalog?: Catalog;
 }

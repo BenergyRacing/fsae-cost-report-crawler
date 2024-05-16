@@ -1,24 +1,14 @@
-import puppeteer from 'puppeteer';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { environment } from './environment/environment';
+import prompts from 'prompts';
 import { crawl } from './crawl';
 import { downloadFiles } from './downloadFiles';
 import { getQueryStringParam, hasFileName } from './utils/url';
+import { promptLogin } from './data/promptLogin';
+import { convertPdfFilesToImages } from './tools/convertPdfFilesToImages/convertPdfFilesToImages';
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false });
-  const page = await browser.newPage();
-
-  await page.setViewport({ width: 1080, height: 608 });
-
-  await page.goto(`${environment.baseUrl}/Login.aspx`);
-
-  console.log(`Please, login to your account.`);
-
-  while (!hasFileName(page.url(), 'Default_NoFlash.aspx')) {
-    await page.waitForNavigation({ timeout: 0 });
-  }
+  const page = await promptLogin();
 
   console.log(`Now, open a cost report to export.`);
 
@@ -29,6 +19,10 @@ import { getQueryStringParam, hasFileName } from './utils/url';
   const systemsUrl = page.url();
 
   const vehicleId = getQueryStringParam(systemsUrl, 'VehicleID') || '';
+
+  const { pdfToImages } = await prompts([
+    { type: 'toggle', name: 'pdfToImages', message: 'Convert PDF to Images?', initial: false },
+  ]);
 
   console.log(`Starting to export ${vehicleId}...`);
 
@@ -42,9 +36,14 @@ import { getQueryStringParam, hasFileName } from './utils/url';
   console.log(`Checking attachments to download...`);
   await downloadFiles(page, cost, vehicleDir);
 
+  if (pdfToImages) {
+    console.log(`Converting PDF to images...`);
+    await convertPdfFilesToImages(cost, vehicleDir);
+  }
+
   console.log(`Writing to file ${costJsonPath}...`);
   await fs.writeFile(costJsonPath, JSON.stringify(cost, null, 2));
 
   console.log(`Done!`);
-  await browser.close();
+  await page.browser().close();
 })();

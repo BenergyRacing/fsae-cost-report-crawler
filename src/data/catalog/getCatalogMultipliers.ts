@@ -1,23 +1,23 @@
-import { Page } from 'puppeteer';
-import { CatalogMultiplier, CatalogProcess } from '../../models/catalog';
+import { ElementHandle, Page } from 'puppeteer';
+import { CatalogLinks } from '../getCatalogLinks';
+import { CatalogMultiplier } from '../../models/catalog';
 import { getCatalogItems } from './getCatalogItems';
+import { getInputFromLabel } from '../../utils/input';
 
-interface RawCatalogMultiplier {
-  title: string;
-  type: string;
-  descr: string;
-  multVal: string;
-  actions: string;
+export async function getCatalogMultipliers(page: Page, links: CatalogLinks): Promise<CatalogMultiplier[]> {
+  console.log('Fetching all catalog multipliers...');
+
+  return await getCatalogItems(page, links.multipliersUrl, 'ProcessMultiplierID', getMultiplier);
 }
 
-export async function getCatalogMultipliers(page: Page, url: string | undefined): Promise<CatalogMultiplier[]> {
-  const items = await getCatalogItems<RawCatalogMultiplier>(page, url);
-
-  return items.map(item => ({
-    id: item.actions,
-    title: item.title,
-    type: item.type,
-    description: item.descr,
-    multiplierValue: item.multVal,
-  }));
+async function getMultiplier(form: ElementHandle<HTMLFormElement>, id: string): Promise<CatalogMultiplier> {
+  return {
+    id: id,
+    type: await form.evaluate(getInputFromLabel, 'Multiplier Type'),
+    title: await form.evaluate(getInputFromLabel, 'Multiplier Title'),
+    description: await form.evaluate(getInputFromLabel, 'Description'),
+    multiplierValue: await form.evaluate(getInputFromLabel, 'Multiplier Value'),
+    obsolete: await form.evaluate(getInputFromLabel, 'Obsolete'),
+    obsoleteComments: await form.evaluate(getInputFromLabel, 'Obsolete Comments'),
+  };
 }

@@ -9,36 +9,57 @@ export interface Catalog {
 
 export interface CatalogMaterial {
   id: string;
-  imageUrl: string;
   title: string;
   supplier: string;
   category: string;
+  size1: string;
+  size2: string;
   unit1: string;
   unit2: string;
-  cost: string;
   description: string;
+  commonNamesLabel: string;
+  commonNames: string;
+  costFormula: string;
+  c1: string;
+  c2: string;
+  obsolete: string;
+  obsoleteComments: string;
 }
 
 export interface CatalogFastener {
   id: string;
-  imageUrl: string;
   title: string;
   supplier: string;
   category: string;
+  size1: string;
+  size2: string;
   unit1: string;
   unit2: string;
-  cost: string;
+  description: string;
+  commonNamesLabel: string;
+  commonNames: string;
+  costFormula: string;
+  c1: string;
+  c2: string;
+  obsolete: string;
+  obsoleteComments: string;
 }
 
 export interface CatalogProcess {
   id: string;
-  imageUrl: string;
   title: string;
+  supplier: string;
   category: string;
   unit1: string;
   toolingRequired: string;
   nearNetShape: string;
   processMultiplierType: string;
+  description: string;
+  commonNamesLabel: string;
+  commonNames: string;
+  unitCost: string;
+  obsolete: string;
+  obsoleteComments: string;
 }
 
 export interface CatalogMultiplier {
@@ -47,12 +68,17 @@ export interface CatalogMultiplier {
   type: string;
   description: string;
   multiplierValue: string;
+  obsolete: string;
+  obsoleteComments: string;
 }
 
 export interface CatalogTool {
   id: string;
-  imageUrl: string;
   title: string;
+  process: string;
   unit: string;
-  processTitle: string;
+  description: string;
+  cost: string;
+  obsolete: string;
+  obsoleteComments: string;
 }

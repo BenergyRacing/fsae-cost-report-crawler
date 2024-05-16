@@ -1,4 +1,5 @@
 import * as path from 'path';
+import { environment } from '../environment/environment';
 
 export function hasFileName(url: string, filename: string): boolean {
   const urlObj = new URL(url);
@@ -8,5 +9,5 @@ export function hasFileName(url: string, filename: string): boolean {
 }
 
 export function getQueryStringParam(url: string, param: string): string | null {
-  return new URL(url).searchParams.get(param);
+  return new URL(url, environment.baseUrl).searchParams.get(param);
 }

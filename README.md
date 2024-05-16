@@ -26,6 +26,14 @@ In this directory, it will produce a `cost-report.json` file (see the ["Cost" Ty
 
 ## Additional Tools
 
+### Catalog Crawler
+
+There is a tool that crawls the whole FSAE Online Catalog and outputs a JSON object containing the details of all materials, fasteners, processes, process multipliers and tools.
+
+To generate the JSON, run `npm run tools:crawl-catalog`.
+
+The output is the ["Catalog" TypeScript interface](https://github.com/BenergyRacing/fsae-cost-report-crawler/tree/main/src/models).
+
 ### Converting PDF to PNG
 
 There is a tool to convert the first page of the PDF files into PNG images.
