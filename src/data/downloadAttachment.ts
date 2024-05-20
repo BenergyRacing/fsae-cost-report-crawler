@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { environment } from '../environment/environment';
 import { CostAttachment } from '../models/cost-attachment';
-import { get, getHeader, waitToEndStream } from '../utils/https';
+import { getHeader, getWithRetries, waitToEndStream } from '../utils/https';
 
 export async function downloadAttachment(page: Page, outputDir: string, attachment: CostAttachment): Promise<void> {
   const url = new URL(attachment.downloadUrl, environment.baseUrl);
@@ -14,7 +14,7 @@ export async function downloadAttachment(page: Page, outputDir: string, attachme
     .map(cookie => encodeURIComponent(cookie.name) + '=' + encodeURIComponent(cookie.value))
     .join('; ');
 
-  const response = await get(url, {
+  const response = await getWithRetries(url, {
     Cookie: cookieHeader,
   });
 
