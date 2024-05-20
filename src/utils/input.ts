@@ -18,6 +18,9 @@ export function getInputFromLabel(form: HTMLFormElement, labelText: string): str
     if (element.tagName.toLowerCase() === 'select')
       return (element as HTMLSelectElement).selectedOptions[0].innerText;
 
+    if (element.tagName.toLowerCase() === 'textarea')
+      return (element as HTMLTextAreaElement).value;
+
     if (element.tagName.toLowerCase() === 'input') {
       const input = element as HTMLInputElement;
 
@@ -39,6 +42,9 @@ export function getInputFromQuery(form: HTMLElement, query: string): string {
 
   if (element.tagName.toLowerCase() === 'select')
     return (element as HTMLSelectElement).selectedOptions[0].innerText;
+
+  if (element.tagName.toLowerCase() === 'textarea')
+    return (element as HTMLTextAreaElement).value;
 
   if (element.tagName.toLowerCase() === 'input') {
     const input = element as HTMLInputElement;

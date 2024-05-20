@@ -22,6 +22,8 @@ export async function getWithRetries(url: URL, headers: Record<string, string>, 
   if (retriesLeft <= 0)
     throw new Error('HTTP error ' + statusCode + ' when downloading ' + url);
 
+  console.warn('HTTP error ' + statusCode + ' when fetching ' + url);
+
   return await getWithRetries(url, headers, retriesLeft - 1);
 }
 
