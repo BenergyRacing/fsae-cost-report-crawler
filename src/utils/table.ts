@@ -11,7 +11,7 @@ export function parseTable(table: HTMLTableElement): Record<string, TableLine>[]
 
   function parseTableValue(element: HTMLElement): TableLine {
     const result: TableLine = {
-      text: element.innerText,
+      text: element.innerText.trim(),
     };
 
     const links = element.querySelectorAll<HTMLElement>('a[href]');
@@ -26,6 +26,9 @@ export function parseTable(table: HTMLTableElement): Record<string, TableLine>[]
   }
 
   trs.forEach(tr => {
+    if (tr.style.display === 'none')
+      return;
+
     const tds = tr.querySelectorAll('td');
 
     if (tds.length === 0 && headers.length === 0) {

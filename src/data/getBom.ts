@@ -34,7 +34,7 @@ async function getBomParts(page: Page): Promise<CostBomPart[]> {
   const results = await table!.evaluate(parseTable);
 
   return results
-    .filter(result => result['Part']?.text && result['Subtotal']?.text)
+    .filter(result => result['Part']?.text)
     .map(result => {
       return {
         part: result['Part']?.text,
@@ -53,7 +53,7 @@ async function getBomMaterials(page: Page): Promise<CostBomMaterial[]> {
   const results = await table!.evaluate(parseTable);
 
   return results
-    .filter(result => result['Material']?.text && result['Subtotal']?.text)
+    .filter(result => result['Material']?.text)
     .map(result => {
       return {
         material: result['Material']?.text,
@@ -77,7 +77,7 @@ async function getBomProcesses(page: Page): Promise<CostBomProcess[]> {
   const results = await table!.evaluate(parseTable);
 
   return results
-    .filter(result => result['Process']?.text && result['Subtotal']?.text)
+    .filter(result => result['Process']?.text)
     .map(result => {
       return {
         process: result['Process']?.text,
@@ -97,7 +97,7 @@ async function getBomFasteners(page: Page): Promise<CostBomFastener[]> {
   const results = await table!.evaluate(parseTable);
 
   return results
-    .filter(result => result['Fastener']?.text && result['Subtotal']?.text)
+    .filter(result => result['Fastener']?.text)
     .map(result => {
       return {
         fastener: result['Fastener']?.text,
@@ -117,7 +117,7 @@ async function getBomTooling(page: Page): Promise<CostBomTooling[]> {
   const results = await table!.evaluate(parseTable);
 
   return results
-    .filter(result => result['Tooling']?.text && result['Subtotal']?.text)
+    .filter(result => result['Tooling']?.text)
     .map(result => {
       return {
         tooling: result['Tooling']?.text,
